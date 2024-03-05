@@ -1,6 +1,7 @@
 import discord
-from utils.utils import create_embeds
+from utils.utils import create_embeds, get_reminder_id_from_title
 from ui.Edit import Edit
+from server.destroyers import delete_user_reminder
 
 class Buttons(discord.ui.View):
     def __init__(self, data, *, timeout=180):
@@ -49,5 +50,20 @@ class Buttons(discord.ui.View):
     @discord.ui.button(style=discord.ButtonStyle.red, label="Delete")
     async def delete_button(self, interaction:discord.Interaction, button:discord.ui.Button):
         embed = self.embeds[self.current_page]
-        print(embed)
-        await interaction.response.send_message("Deleted")
+        embed_values = {}
+        for field in embed.fields:
+            embed_values[field.name] = field.value
+
+        reminder_id = get_reminder_id_from_title(embed.title)
+        username = embed_values['Username']
+        if username != interaction.user.name:
+            await interaction.response.send_message("You are not authorized to delete", ephemeral=True)
+            return
+        res = delete_user_reminder(username=username, reminder_id=reminder_id)
+        self.embeds.pop(self.current_page)
+        # self.current_page = 1
+        self.max_page -= 1
+        # for i in range(len(self.embeds)):
+        #     self.embeds[i].set_footer(text=f"Page: {self.current_page+1}/{self.max_page}")
+        await interaction.response.edit_message(embed=self.embeds[self.current_page])
+        
