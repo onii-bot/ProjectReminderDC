@@ -12,7 +12,7 @@ class Edit(discord.ui.Modal, title='Edit'):
 
     async def on_submit(self, interaction: discord.Interaction):
         if interaction.user.name != self.embed_values['Username']:
-            await interaction.response.send_message(f'You are not authorized to edit this reminder')
+            await interaction.response.send_message(f'You are not authorized to edit this reminder', ephemeral=True)
             return
         
         reminder_time, frequency, progress = [item.value for item in self.children]

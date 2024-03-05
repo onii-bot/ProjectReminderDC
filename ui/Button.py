@@ -15,7 +15,7 @@ class Buttons(discord.ui.View):
             self.current_page -= 1
             await interaction.response.edit_message(embed=self.embeds[self.current_page],view=self)
         else:
-            await interaction.response.send_message("You are reaching void bud")
+            await interaction.response.send_message("You are reaching void bud", ephemeral=True)
 
     @discord.ui.button(style=discord.ButtonStyle.gray,emoji="➡️")
     async def right_arrow(self, interaction:discord.Interaction, button:discord.ui.Button):
@@ -23,7 +23,7 @@ class Buttons(discord.ui.View):
             self.current_page += 1
             await interaction.response.edit_message(embed=self.embeds[self.current_page],view=self)
         else:
-            await interaction.response.send_message("You are reaching void bud")
+            await interaction.response.send_message("You are reaching void bud", ephemeral=True)
     
     @discord.ui.button(style=discord.ButtonStyle.primary,label="Edit")
     async def edit_button(self, interaction:discord.Interaction, button:discord.ui.Button):
@@ -45,3 +45,9 @@ class Buttons(discord.ui.View):
         ))
 
         await interaction.response.send_modal(edit)
+    
+    @discord.ui.button(style=discord.ButtonStyle.red, label="Delete")
+    async def delete_button(self, interaction:discord.Interaction, button:discord.ui.Button):
+        embed = self.embeds[self.current_page]
+        print(embed)
+        await interaction.response.send_message("Deleted")
