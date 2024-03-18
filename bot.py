@@ -51,7 +51,7 @@ async def set_reminder(interaction: discord.Interaction, project:str, reminder_t
 @set_reminder.autocomplete('project')
 async def autocomplete_callback(interaction: discord.Interaction, current: str):
     projects = get_projects()
-    return [app_commands.Choice(name=f'{projects[id]['project_name']}', value=f'{id}') for id in projects.keys()]
+    return [app_commands.Choice(name=f"{projects[id]['project_name']}", value=f'{id}') for id in projects.keys()]
 
 """
 
