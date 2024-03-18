@@ -1,4 +1,5 @@
 import requests
+from server.base import BASE_URI
 
 def edit_user_reminder(username, reminder_time, frequency, progress, project, reminder_id):
     data = {
@@ -8,4 +9,4 @@ def edit_user_reminder(username, reminder_time, frequency, progress, project, re
         "progress": progress,
         "project": project
     }
-    return requests.put(f"http://127.0.0.1:8000/api/users/{username}/{reminder_id}/", data=data)
+    return requests.put(f"{BASE_URI}/api/users/{username}/{reminder_id}/", data=data)

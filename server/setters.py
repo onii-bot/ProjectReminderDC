@@ -1,4 +1,5 @@
 import requests
+from server.base import BASE_URI
 
 def set_user_reminder(username, reminder_time, frequency, progress, project):
     data = {
@@ -8,4 +9,4 @@ def set_user_reminder(username, reminder_time, frequency, progress, project):
         "progress": progress,
         "project": project
     }
-    return requests.post("http://127.0.0.1:8000/api/users/", data=data)
+    return requests.post(f"{BASE_URI}/api/users/", data=data)

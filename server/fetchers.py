@@ -1,7 +1,8 @@
 import requests
+from server.base import BASE_URI
 
 def get_projects():
-    projects = requests.get("http://127.0.0.1:8000/api/projects/").json()
+    projects = requests.get(f"{BASE_URI}/api/projects/").json()
     projects_dict = {
     }
     for project in projects:
@@ -9,5 +10,5 @@ def get_projects():
     return projects_dict
 
 def get_user_reminders(user):
-    data = requests.get(f"http://127.0.0.1:8000/api/users/{user}").json()
+    data = requests.get(f"{BASE_URI}/api/users/{user}").json()
     return data
