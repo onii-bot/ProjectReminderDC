@@ -8,7 +8,7 @@ def create_embeds_reminder(data):
     total = len(data)
     for index, item in enumerate(data):
         embed = discord.Embed(title=f"Reminder ID: {item['id']}", color=discord.Color.blurple())
-        embed.set_author(name=f'Project ID: {projects[item['project']]["id"]}')
+        embed.set_author(name=f"Project ID: {projects[item['project']]['id']}")
         embed.add_field(name="Username", value=item['username'], inline=True)
         embed.add_field(name="Reminder Time", value=item['reminder_time'], inline=True)
         embed.add_field(name="Frequency", value=item['frequency'], inline=False)
