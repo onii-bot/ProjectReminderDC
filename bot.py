@@ -15,17 +15,22 @@ load_dotenv()
 intents = discord.Intents.all()
 intents.members = True
 
-client = commands.Bot(intents=intents, command_prefix=".", case_insensitive=True)
+client = commands.Bot(intents=intents, command_prefix="mimi", case_insensitive=True)
 
 
 @client.event
 async def on_ready():
+    print("logged in")
+
+
+@client.command()
+async def sync(ctx):
     try:
         synced = await client.tree.sync()
         print(f"Synced {len(synced)} commands")
+        await ctx.send("synced")
     except Exception as e:
         print(e)
-    print("logged in")
 
 
 """
@@ -68,8 +73,8 @@ async def show_reminders(interaction: discord.Interaction, user: discord.Member 
     data = get_user_reminders(user)
     if data:
         embeds = create_embeds_reminder(data)
-        view= ReminderButtons(data)
-        await interaction.followup.send(embed=embeds[0],view=view)
+        view = ReminderButtons(data)
+        view.message = await interaction.followup.send(embed=embeds[0],view=view)
     else:
         await interaction.followup.send("You have no reminders set. Please start by using /set_reminder")
 
