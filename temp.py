@@ -1,13 +1,14 @@
 import requests
-username = "thenooboi"
-def set_user_reminder():
-    data = {
-        "username": username,
-        "reminder_time":"10pm",
-        "frequency":"weekly",
-        "progress": "None",
-        "project":1
-    }
-    return requests.put("http://127.0.0.1:8000/api/users/noob/1/", data=data)
+from server.base import BASE_URI
 
-set_user_reminder()
+def get_projects():
+    projects = requests.get(f"{BASE_URI}/api/projects/").json()
+    projects_dict = {
+    }
+    for project in projects:
+        projects_dict[project['id']] = project
+    return projects_dict
+
+def get_user_reminders(user):
+    data = requests.get(f"{BASE_URI}/api/users/{user}").json()
+    return data

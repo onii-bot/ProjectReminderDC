@@ -4,9 +4,9 @@ from discord.ext import commands
 import os
 from typing import Literal
 from dotenv import load_dotenv
-from utils.utils import create_embeds, isTimeValid
-from ui.Button import Buttons
-from server.fetchers import get_projects,get_user_reminders
+from utils.utils import create_embeds_reminder, isTimeValid, create_embeds_project
+from ui.Button import ReminderButtons, ProjectButtons
+from server.fetchers import get_projects, get_user_reminders
 from server.setters import set_user_reminder
 
 load_dotenv()
@@ -66,12 +66,26 @@ async def show_reminders(interaction: discord.Interaction, user: discord.Member 
         user = interaction.user.name
     data = get_user_reminders(user)
     if data:
-        embeds = create_embeds(data)
-        view=Buttons(data)
+        embeds = create_embeds_reminder(data)
+        view= ReminderButtons(data)
         await interaction.response.send_message(embed=embeds[0],view=view)
     else:
         await interaction.response.send_message("You have no reminders set. Please start by using /set_reminder")
 
+"""
+
+Part for fetching projects
+
+"""
+@client.tree.command()
+async def show_projects(interaction: discord.Interaction):
+    projects = get_projects()
+    if projects:
+        embeds = create_embeds_project(projects)
+        view= ProjectButtons(projects)
+        await interaction.response.send_message(embed=embeds[0],view=view)
+    else:
+        await interaction.response.send_message("You have no reminders set. Please start by using /set_reminder")
 
 
 client.run(os.environ["DISCORD_TOKEN"])

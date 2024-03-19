@@ -2,7 +2,7 @@ import discord
 from server.fetchers import get_projects
 import re
 
-def create_embeds(data):
+def create_embeds_reminder(data):
     embeds = []
     projects = get_projects()
     total = len(data)
@@ -24,6 +24,36 @@ def create_embeds(data):
         embeds.append(embed)
 
     return embeds
+
+def create_embeds_project(projects):
+    embeds = []
+    total = len(projects)
+    for index, item in enumerate(projects.values()):
+        embed = discord.Embed(title=f"Project ID: {item['id']}", color=discord.Color.blurple())
+        embed.add_field(name="Project Name", value=item['project_name'], inline=True)
+        embed.add_field(name="Tier", value=item['tier'], inline=True)
+        embed.add_field(name="Cost to Farm", value=item['cost_to_farm'], inline=True)
+        embed.add_field(name="Airdrop Status", value=item['airdrop_status'], inline=True)
+        embed.add_field(name="Priority", value=item['priority'], inline=True)
+        embed.add_field(name="Funding", value=item['funding'], inline=True)
+        embed.add_field(name="Stage", value=item['stage'], inline=True)
+        embed.add_field(name="Type", value=item['type'], inline=True)
+        embed.add_field(name="Chain", value=item['chain'], inline=True)
+        if item["tasks"]:
+            embed.add_field(name="Tasks", value=item["tasks"], inline=False)
+        else:
+            embed.add_field(name="Tasks", value="None", inline=False)
+        if item["image_link"]:
+            embed.set_thumbnail(url=item["image_link"])
+        embed.add_field(name="Twitter Guide", value=item["twitter_guide"], inline=False)
+        embed.add_field(name="Discord Link", value=item["discord_link"], inline=False)
+        embed.add_field(name="Twitter Link", value=item["twitter_link"], inline=False)
+        embed.add_field(name="Frequency", value=item["frequency"], inline=True)
+        embed.set_footer(text=f"Page: {index+1}/{total}")
+        embeds.append(embed)
+
+    return embeds
+
 
 def get_project_id_from_author(text):
     match = re.search(r'Project ID: (\d+)', text)

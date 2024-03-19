@@ -1,13 +1,13 @@
 import discord
-from utils.utils import create_embeds, get_reminder_id_from_title
+from utils.utils import create_embeds_reminder, get_reminder_id_from_title, create_embeds_project
 from ui.Edit import Edit
 from server.destroyers import delete_user_reminder
 
-class Buttons(discord.ui.View):
+class ReminderButtons(discord.ui.View):
     def __init__(self, data, *, timeout=180):
         super().__init__(timeout=timeout)
         self.current_page = 0
-        self.embeds = create_embeds(data)
+        self.embeds = create_embeds_reminder(data)
         self.max_page = len(data)-1
 
     @discord.ui.button(style=discord.ButtonStyle.secondary,emoji="⬅️")
@@ -66,4 +66,27 @@ class Buttons(discord.ui.View):
         # for i in range(len(self.embeds)):
         #     self.embeds[i].set_footer(text=f"Page: {self.current_page+1}/{self.max_page}")
         await interaction.response.edit_message(embed=self.embeds[self.current_page])
+
+class ProjectButtons(discord.ui.View):
+    def __init__(self, data, *, timeout=180):
+        super().__init__(timeout=timeout)
+        self.current_page = 0
+        self.embeds = create_embeds_project(data)
+        self.max_page = len(data)-1
+
+    @discord.ui.button(style=discord.ButtonStyle.secondary,emoji="⬅️")
+    async def left_arrow(self, interaction:discord.Interaction, button:discord.ui.Button):
+        if self.current_page > 0:
+            self.current_page -= 1
+            await interaction.response.edit_message(embed=self.embeds[self.current_page],view=self)
+        else:
+            await interaction.response.send_message("You are reaching void bud", ephemeral=True)
+
+    @discord.ui.button(style=discord.ButtonStyle.gray,emoji="➡️")
+    async def right_arrow(self, interaction:discord.Interaction, button:discord.ui.Button):
+        if self.current_page < self.max_page:
+            self.current_page += 1
+            await interaction.response.edit_message(embed=self.embeds[self.current_page],view=self)
+        else:
+            await interaction.response.send_message("You are reaching void bud", ephemeral=True)
         
