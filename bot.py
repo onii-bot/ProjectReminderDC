@@ -62,15 +62,16 @@ Part for fetching reminder for a user
 @client.tree.command()
 @app_commands.describe(user="Select a user whose reminders you want to fetch")
 async def show_reminders(interaction: discord.Interaction, user: discord.Member = None):
+    await interaction.response.defer()
     if user is None:
         user = interaction.user.name
     data = get_user_reminders(user)
     if data:
         embeds = create_embeds_reminder(data)
         view= ReminderButtons(data)
-        await interaction.response.send_message(embed=embeds[0],view=view)
+        await interaction.followup.send(embed=embeds[0],view=view)
     else:
-        await interaction.response.send_message("You have no reminders set. Please start by using /set_reminder")
+        await interaction.followup.send("You have no reminders set. Please start by using /set_reminder")
 
 """
 
@@ -79,13 +80,14 @@ Part for fetching projects
 """
 @client.tree.command()
 async def show_projects(interaction: discord.Interaction):
+    await interaction.response.defer()
     projects = get_projects()
     if projects:
         embeds = create_embeds_project(projects)
         view= ProjectButtons(projects)
-        await interaction.response.send_message(embed=embeds[0],view=view)
+        await interaction.followup.send(embed=embeds[0],view=view)
     else:
-        await interaction.response.send_message("You have no reminders set. Please start by using /set_reminder")
+        await interaction.followup.send("You have no reminders set. Please start by using /set_reminder")
 
 
 client.run(os.environ["DISCORD_TOKEN"])
